@@ -1,12 +1,16 @@
 import AppHeader from "../appHeader/AppHeader";
+import RandomChar from "../randomChar/RandomChar";
 
 
-const App = () => {
+function App() {
     return (
         <div className="app">
-            <AppHeader/>
+            <AppHeader />
+            <main>
+                <RandomChar />
+            </main>
         </div>
-    )
+    );
 }
 
 export default App;
