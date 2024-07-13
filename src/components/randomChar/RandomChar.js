@@ -5,7 +5,7 @@ import MarvelService from '../../services/MarvelService';
 
 import './randomChar.scss';
 import shield from '../../resources/img/shield.png'
-
+// commit for test
 class RandomChar extends Component {
 	state = {
 		char: {},
