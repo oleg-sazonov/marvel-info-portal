@@ -1,6 +1,7 @@
 class MarvelService {
 	_apiBase = 'https://gateway.marvel.com:443/v1/public/';
 	_apiKey = 'apikey=cbd9507e6ea639624589f6b2efbadb9b';
+	imgNotFound = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
 
 	//Function to getting data from https://developer.marvel.com/
 	getResource = async (url) => {
@@ -31,6 +32,12 @@ class MarvelService {
 			homepage: char.urls[0].url,
 			wiki: char.urls[1].url
 		}
+	}
+
+	updateThumbnailFit = (thumbnail, objectFit) => {
+		if (thumbnail === this.imgNotFound) {
+			return objectFit;
+		} 
 	}
 }
 

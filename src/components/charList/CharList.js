@@ -28,7 +28,6 @@ class CharList extends Component {
 		});
 
 		this.setState({list: itemsWithIds, loading: false})
-		console.log(itemsWithIds);
 	}
 
 	onError = () => {
@@ -44,11 +43,14 @@ class CharList extends Component {
 
 	render() {
 		const {list, loading, error} = this.state;
-		const errorMessage = error ? <ErrorMessage/> : null;
-		const spinner = loading ? <Spinner/> : null;
-		const content = !(loading || error) ? <CharItem list={list}/> : null;
+		const thumbsList = list.map(char => char.thumbnail);
 		const spinnerStyle = {display: 'block'};
 
+		const errorMessage = error ? <ErrorMessage/> : null;
+		const spinner = loading ? <Spinner/> : null;
+		const content = !(loading || error) ? <CharItems list={list} 
+			thumbsList={thumbsList}/> : null;
+		
 		return (
 			<div className="char__list">
 				<ul className="char__grid"
@@ -66,12 +68,14 @@ class CharList extends Component {
 	}
 }
 
-const CharItem = ({list}) => {
-
+const CharItems = ({list, thumbsList}) => {
+	const marvelService = new MarvelService();
 	return (
-		list.map((char) => (
+		list.map((char, i) => (
 			<li key={char.id} className="char__item">
-			  	<img src={char.thumbnail} alt={char.name}/>
+			  	<img src={char.thumbnail} 
+				alt={char.name}
+				style={marvelService.updateThumbnailFit(thumbsList[i], {objectFit: 'fill'})}/>
 			  	<div className="char__name">{char.name}</div>
 			</li>
 		))
