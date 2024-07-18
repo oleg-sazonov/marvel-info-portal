@@ -6,6 +6,7 @@ import MarvelService from '../../services/MarvelService';
 import './charList.scss';
 
 class CharList extends Component {
+	
 	state = {
 		list: [],
 		loading: true,
@@ -19,9 +20,9 @@ class CharList extends Component {
 	}
 
 	onListLoaded = (items) => {
-		const itemsWithIds = items.map((item, index) => {
+		const itemsWithIds = items.map((item) => {
 			return {
-				id: index + 1,
+				id: item.id,
 				name: item.name,
 				thumbnail: item.thumbnail
 			}
@@ -41,6 +42,22 @@ class CharList extends Component {
 			.catch(this.onError);
 	}
 
+	renderItems = (chars, thumbs) => {
+		return (
+			chars.map((char, i) => (
+				<li 
+					key={char.id} 
+					onClick={() => this.props.onCharSelected(char.id)}
+					className="char__item">
+						<img src={char.thumbnail} 
+						alt={char.name}
+						style={this.marvelService.updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}/>
+						<div className="char__name">{char.name}</div>
+				</li>
+			))
+		)
+	}
+
 	render() {
 		const {list, loading, error} = this.state;
 		const thumbsList = list.map(char => char.thumbnail);
@@ -48,13 +65,12 @@ class CharList extends Component {
 
 		const errorMessage = error ? <ErrorMessage/> : null;
 		const spinner = loading ? <Spinner/> : null;
-		const content = !(loading || error) ? <CharItems list={list} 
-			thumbsList={thumbsList}/> : null;
+		const content = !(loading || error) ? this.renderItems(list, thumbsList) : null;
 		
 		return (
 			<div className="char__list">
 				<ul className="char__grid"
-				style={loading ? spinnerStyle : null}>
+					style={loading ? spinnerStyle : null}>
 					{errorMessage}
 					{spinner}
 					{content}
@@ -66,20 +82,6 @@ class CharList extends Component {
 			</div>
 		)
 	}
-}
-
-const CharItems = ({list, thumbsList}) => {
-	const marvelService = new MarvelService();
-	return (
-		list.map((char, i) => (
-			<li key={char.id} className="char__item">
-			  	<img src={char.thumbnail} 
-				alt={char.name}
-				style={marvelService.updateThumbnailFit(thumbsList[i], {objectFit: 'fill'})}/>
-			  	<div className="char__name">{char.name}</div>
-			</li>
-		))
-	)
 }
 
 export default CharList;
