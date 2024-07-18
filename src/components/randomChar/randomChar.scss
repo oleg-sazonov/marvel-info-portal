@@ -25,12 +25,12 @@
 	&__name {
 		font-weight: 700;
 		font-size: 22px;
-		line-height: 26px;
+		line-height: 29px;
 		text-transform: uppercase;
 	}
 	&__descr {
 		font-size: 14px;
-		line-height: 16px;
+		line-height: 18px;
 	}
 	&__buttons {
 		a:nth-child(1) {
@@ -41,7 +41,7 @@
 		padding: 40px 35px;
 		background-color: $dark;
 		position: relative;
-        a {
+        button {
             margin-top: 13px;
         }
 	}
@@ -60,4 +60,3 @@
         right: -37px;
     }
 }
-

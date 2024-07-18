@@ -60,11 +60,11 @@ class RandomChar extends Component {
 					<p className="randomchar__title">
 						Or choose another one
 					</p>
-					<a href="#" 
+					<button 
 					className="button button__main"
 					onClick={this.updateChar}>
 						<div className="inner">TRY IT</div>
-					</a>
+					</button>
 					<img src={shield} alt="Shield"
 						className="randomchar__decoration"/>
 				</div>
