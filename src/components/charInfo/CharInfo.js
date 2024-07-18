@@ -58,7 +58,6 @@ class CharInfo extends Component {
 		const spinner = loading ? <Spinner/> : null;
 		const content = !(loading || error || !char) ? <View char={char}/> : null;
 
-
 		return (
 			<div className="char__info">
 				{skeleton}
@@ -72,10 +71,25 @@ class CharInfo extends Component {
 
 const View = ({char}) => {
 	const {name, description, thumbnail, homepage, wiki, comics} = char;
+	const marvelService = new MarvelService();
+	const thumbnailFit = marvelService.updateThumbnailFit(thumbnail, {objectFit: 'fill'});
+
+	const comicsVar = (comics.length < 1) ? 'Comics not found' : comics
+		.filter((_, i) => i < 10)
+		.map((item, i) => {
+			return (
+				<li key={i + 1} className="char__comics-item">
+					{item.name}
+				</li>
+			) 			
+	});
+	
 	return(
 		<>
 		<div className="char__basics">
-			<img src={thumbnail} alt={name}/>
+			<img src={thumbnail} 
+				alt={name}
+				style={thumbnailFit}/>
 			<div>
 				<div className="char__info-name">{name}</div>
 				<div className="char__buttons">
@@ -95,13 +109,7 @@ const View = ({char}) => {
 			Comics:
 		</div>
 		<ul className="char__comics-list">
-			{comics.map((item, i) => {
-				return (
-					<li key={i + 1} className="char__comics-item">
-						{item.name}
-					</li>
-				) 			
-			})}
+			{comicsVar}
 		</ul>
 	</>
 	)
