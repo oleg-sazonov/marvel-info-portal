@@ -1,7 +1,8 @@
 class MarvelService {
 	_apiBase = 'https://gateway.marvel.com:443/v1/public/';
 	_apiKey = 'apikey=cbd9507e6ea639624589f6b2efbadb9b';
-	imgNotFound = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
+	_imgNotFound = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
+	_baseCharacterOffset = 210;
 
 	//Function to getting data from https://developer.marvel.com/
 	getResource = async (url) => {
@@ -14,8 +15,8 @@ class MarvelService {
 		return await res.json();
 	};
 
-	getAllCharacters = async () => {
-		const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=210&${this._apiKey}`);
+	getAllCharacters = async (offset = this._baseCharacterOffset) => {
+		const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=${offset}&${this._apiKey}`);
 		return res.data.results.map(this._transformCharacter);
 	}
 
@@ -37,7 +38,7 @@ class MarvelService {
 	}
 
 	updateThumbnailFit = (thumbnail, objectFit) => {
-		if (thumbnail === this.imgNotFound) {
+		if (thumbnail === this._imgNotFound) {
 			return objectFit;
 		} 
 	}
