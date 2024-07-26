@@ -7,11 +7,20 @@
 		position: relative;
 		background: #fff;
         z-index: 5;
+		transition: all 0.3s ease-in-out;
+
+   		right: auto; 
 		&-name {
 			font-size: 22px;
 			font-weight: 700;
 			line-height: 26px;
 			text-transform: uppercase;
+		}
+		&_fixed {
+			position: fixed;
+			top: 20px;
+			right: 400px;
+			width: 425px; 
 		}
 	}
 	&__basics {

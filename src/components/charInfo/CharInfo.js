@@ -13,19 +13,25 @@ class CharInfo extends Component {
 	state = {
 		char: null,
 		loading: false,
-		error: false
+		error: false,
+		isFixed: false
 	}
 
 	marvelService = new MarvelService();
 
 	componentDidMount() {
 		this.updateChar();
+		window.addEventListener('scroll', this.handleScroll);
 	}
 
 	componentDidUpdate(prevProps) {
 		if (this.props.charId !== prevProps.charId) {
 			this.updateChar();
 		}
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('scroll', this.handleScroll);
 	}
 
 	updateChar = () => {
@@ -53,8 +59,17 @@ class CharInfo extends Component {
 		this.setState({loading: false, error: true})
 	}
 
+	handleScroll = () => {
+		const scrollPosition = window.scrollY;
+		console.log(`User has scrolled: ${scrollPosition}px`);
+		const shouldBeFixed = scrollPosition > 425; 
+		if (this.state.isFixed !== shouldBeFixed) {
+			this.setState({ isFixed: shouldBeFixed });
+		}
+	}
+
 	render() {
-		const {char, loading, error} = this.state;
+		const {char, loading, error, isFixed} = this.state;
 
 		const skeleton = char || loading || error ? null : <Skeleton/>;
 		const errorMessage = error ? <ErrorMessage/> : null;
@@ -62,7 +77,7 @@ class CharInfo extends Component {
 		const content = !(loading || error || !char) ? <View char={char}/> : null;
 
 		return (
-			<div className="char__info">
+			<div className={`char__info ${isFixed ? 'char__info_fixed' : ''}`}>
 				{skeleton}
 				{errorMessage}
 				{spinner}
