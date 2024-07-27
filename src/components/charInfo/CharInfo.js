@@ -61,7 +61,7 @@ class CharInfo extends Component {
 
 	handleScroll = () => {
 		const scrollPosition = window.scrollY;
-		console.log(`User has scrolled: ${scrollPosition}px`);
+		// console.log(`User has scrolled: ${scrollPosition}px`);
 		const shouldBeFixed = scrollPosition > 425; 
 		if (this.state.isFixed !== shouldBeFixed) {
 			this.setState({ isFixed: shouldBeFixed });

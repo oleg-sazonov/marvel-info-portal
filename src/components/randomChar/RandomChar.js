@@ -17,13 +17,14 @@ class RandomChar extends Component {
 	marvelService = new MarvelService();
 
 	componentDidMount() {
-		// this.updateChar();
+		this.updateChar();
 	}
 
 	// It helps with the problem of double mounting randomChar after. Use it instead of componentDidMount()
-	componentWillUnmount() {
-		this.updateChar();
-	}
+	// But it needs only in develop
+	// componentWillUnmount() {
+	// 	this.updateChar();
+	// }
 
 	onCharLoaded = (char) => {
 		this.setState({char, loading: false})

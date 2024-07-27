@@ -27,13 +27,14 @@ class CharList extends Component {
 	marvelService = new MarvelService();
 
 	componentDidMount() {
-		// this.onRequest();
+		this.onRequest();
 	}
 
 	// It helps with the problem of double mounting charList after onClick on className="button button__main button__long". Use it instead of componentDidMount()
-	componentWillUnmount() {
-		this.onRequest();
-	}
+	// But it needs only in develop
+	// componentWillUnmount() {
+	// 	this.onRequest();
+	// }
 
 	onRequest = (offset) => {
 		this.onCharListLoading();
