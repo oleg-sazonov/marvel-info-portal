@@ -4,6 +4,7 @@ import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
+import UpButton from "../upButton/UpButton";
 
 import decoration from "../../resources/img/bg-hero.png";
 
@@ -37,6 +38,7 @@ class App extends Component {
                         </ErrorBoundary>
                         <img src={decoration} alt="bg-hero" className="bg-decoration"/>
                     </div>
+                    <UpButton />
                 </main>
             </div>
         );
