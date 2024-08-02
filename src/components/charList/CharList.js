@@ -1,4 +1,4 @@
-import { Component, createRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Spinner from '../spinner/Spinner';
@@ -7,110 +7,84 @@ import MarvelService from '../../services/MarvelService';
 
 import './charList.scss';
 
-class CharList extends Component {
-	constructor(props) {
-		super(props);
-		// Create refs for all list chars and state for the selected char
-		// charRefs will have as many refs as chars will be exist
-		this.charRefs = [];
-		this.state = {
-			charList: [],
-			loading: true,
-			error: false,
-			newItemLoading: false,
-			offset: 210,
-			charEnded: false,
-			selectedCharId: null
-		}; 
-	}
+const CharList = (props) => {
+
+	const [charList, setCharList] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(false);
+	const [newItemLoading, setNewItemLoading] = useState(false);
+	const [offset, setOffset] = useState(210);
+	const [charEnded, setCharEnded] = useState(false);
 	
-	marvelService = new MarvelService();
+	useEffect(() => {
+		onRequest();
+	}, []);
 
-	componentDidMount() {
-		this.onRequest();
-	}
+	const marvelService = new MarvelService();
 
-	// It helps with the problem of double mounting charList after onClick on className="button button__main button__long". Use it instead of componentDidMount()
-	// But it needs only in develop
-	// componentWillUnmount() {
-	// 	this.onRequest();
-	// }
-
-	onRequest = (offset) => {
-		this.onCharListLoading();
-		this.marvelService
+	const onRequest = (offset) => {
+		onCharListLoading();
+		marvelService
 			.getAllCharacters(offset)
-			.then(this.onCharListLoaded)
-			.catch(this.onError)
+			.then(onCharListLoaded)
+			.catch(onError)
 	}
 
-	onCharListLoading = () => {
-		this.setState({
-			newItemLoading: true
-		})
+	const onCharListLoading = () => {
+		setNewItemLoading(true);
 	}
 
-	onCharListLoaded = (newCharList) => {
+	const onCharListLoaded = (newCharList) => {
 		let ended = false;
 		if (newCharList.length < 9) {
 			ended = true;
 		}
 
-		this.setState(({offset, charList}) => ({
-            charList: [...charList, ...newCharList],
-            loading: false,
-            newItemLoading: false,
-            offset: offset + 9,
-			charEnded: ended
-        }))
+		setCharList(charList => [...charList, ...newCharList]);
+		setLoading(false);
+		setNewItemLoading(false);
+		setOffset(offset => offset + 9);
+		setCharEnded(ended);
 	}
 
-	onError = () => {
-		this.setState({loading: false, error: true})
+	const onError = () => {
+		setLoading(false);
+		setError(true);
 	}
 
-	onCharClick = (id, index) => {
-		// Update the state with the selected char ID
-		this.setState({selectedCharId: id});
-		// Set focus on the clicked char
-		if (this.charRefs[index] && this.charRefs[index].current) {
-		  this.charRefs[index].current.focus();
-		}
+	const charRefs = useRef([]);
+
+	const focusOnItem = (id) => {
+		charRefs.current.forEach(item => item.classList.remove('char__item_selected'));
+		charRefs.current[id].classList.add('char__item_selected');
+		charRefs.current[id].focus();
 	}
 
-	onCharFocus = id => {
-		// Set focus on the tabbed char. It doesn't need index
-		this.setState({selectedCharId: id})
-	}
-
-	renderItems = (chars, thumbs) => {
+	function renderItems (chars, thumbs) {
 		const items = chars.map((char, i) => {
-			// Create a ref for each char
-			this.charRefs[i] = createRef();
-			// Determine if the current char is selected
-			const isSelected = char.id === this.state.selectedCharId;
 
 			return (
 				<li 
-				className={`char__item ${isSelected ? 'char__item_selected' : ''}`}
+				className={'char__item'}
+				tabIndex="0"
+				ref={el => charRefs.current[i] = el}
 				key={char.id} 
 				onClick={() => {
-					this.props.onCharSelected(char.id);
-					this.onCharClick(char.id, i);
+					props.onCharSelected(char.id);
+					focusOnItem(i);
 				}}
-				onFocus={() => {
-					this.props.onCharSelected(char.id);
-					this.onCharFocus(char.id);
+				onKeyDown={e => {
+					if (e.key === ' ' || e.key === 'Enter') {
+					  e.preventDefault();
+					  props.onCharSelected(char.id);
+					  focusOnItem(i);
+					}
 				}}
-				// This attribute makes ref for createRef() method
-				ref={this.charRefs[i]}
-				// This attribute makes the list chars focusable and keyboard-accessible
-				tabIndex="0"
 				>
 				<img 
 					src={char.thumbnail} 
 					alt={char.name}
-					style={this.marvelService.updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}
+					style={marvelService.updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}
 				/>
 				<div className="char__name">{char.name}</div>
 			</li>
@@ -124,29 +98,25 @@ class CharList extends Component {
 		)
 	}
 
-	render() {
-		const {charList, loading, error, newItemLoading, offset, charEnded} = this.state;
-		const thumbsList = charList.map(char => char.thumbnail);
-
-		const errorMessage = error ? <ErrorMessage/> : null;
-		const spinner = loading ? <Spinner/> : null;
-		const content = !(loading || error) ? this.renderItems(charList, thumbsList) : null;
-		
-		return (
-			<div className="char__list">
-					{errorMessage}
-					{spinner}
-					{content}
-				<button 
-					className="button button__main button__long"
-					disabled={newItemLoading}
-					style={{'display': charEnded ? 'none' : 'block'}}
-					onClick={() => this.onRequest(offset)}>
-					<div className="inner">load more</div>
-				</button>
-			</div>
-		)
-	}
+	const thumbsList = charList.map(char => char.thumbnail);
+	const errorMessage = error ? <ErrorMessage/> : null;
+	const spinner = loading ? <Spinner/> : null;
+	const content = !(loading || error) ? renderItems(charList, thumbsList) : null;
+	
+	return (
+		<div className="char__list">
+				{errorMessage}
+				{spinner}
+				{content}
+			<button 
+				className="button button__main button__long"
+				disabled={newItemLoading}
+				style={{'display': charEnded ? 'none' : 'block'}}
+				onClick={() => onRequest(offset)}>
+				<div className="inner">load more</div>
+			</button>
+		</div>
+	)
 }
 
 CharList.propTypes = {
