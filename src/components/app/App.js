@@ -24,7 +24,7 @@ const App = () => {
                 <ErrorBoundary>
                     <RandomChar />
                 </ErrorBoundary>
-                {/* <div className="char__content">
+                <div className="char__content">
                     <ErrorBoundary>
                         <CharList onCharSelected={onCharSelected}/>
                     </ErrorBoundary>
@@ -32,7 +32,7 @@ const App = () => {
                         <CharInfo charId={selectedChar}/>
                     </ErrorBoundary>
                 </div>
-                <UpButton /> */}
+                <UpButton />
                 <img src={decoration} alt="bg-hero" className="bg-decoration"/>
             </main>
         </div>

@@ -1,7 +1,7 @@
 import { useHttp } from "../hooks/http.hook";
 
 const useMarvelService = () => {
-	const {loading, request, error} = useHttp();
+	const {loading, request, error, clearError} = useHttp();
 	const _apiBase = 'https://gateway.marvel.com:443/v1/public/';
 	const _apiKey = 'apikey=cbd9507e6ea639624589f6b2efbadb9b';
 	const _imgNotFound = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
@@ -35,7 +35,7 @@ const useMarvelService = () => {
 		} 
 	}
 
-	return {loading, error, getAllCharacters, getCharacter, updateThumbnailFit}
+	return {loading, error, clearError,	 getAllCharacters, getCharacter, updateThumbnailFit}
 }
 
 export default useMarvelService;

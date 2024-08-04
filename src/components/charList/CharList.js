@@ -3,35 +3,27 @@ import PropTypes from 'prop-types';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './charList.scss';
 
 const CharList = (props) => {
 
 	const [charList, setCharList] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(false);
 	const [newItemLoading, setNewItemLoading] = useState(false);
 	const [offset, setOffset] = useState(210);
 	const [charEnded, setCharEnded] = useState(false);
 	
+	const {loading, error, getAllCharacters, updateThumbnailFit} = useMarvelService();
+
 	useEffect(() => {
-		onRequest();
+		onRequest(offset, true);
 	}, []);
 
-	const marvelService = new MarvelService();
-
-	const onRequest = (offset) => {
-		onCharListLoading();
-		marvelService
-			.getAllCharacters(offset)
-			.then(onCharListLoaded)
-			.catch(onError)
-	}
-
-	const onCharListLoading = () => {
-		setNewItemLoading(true);
+	const onRequest = (offset, initial) => {
+		initial ? setNewItemLoading(false) : setNewItemLoading(true);
+		getAllCharacters(offset)
+			.then(onCharListLoaded);
 	}
 
 	const onCharListLoaded = (newCharList) => {
@@ -41,15 +33,9 @@ const CharList = (props) => {
 		}
 
 		setCharList(charList => [...charList, ...newCharList]);
-		setLoading(false);
 		setNewItemLoading(false);
 		setOffset(offset => offset + 9);
 		setCharEnded(ended);
-	}
-
-	const onError = () => {
-		setLoading(false);
-		setError(true);
 	}
 
 	const charRefs = useRef([]);
@@ -84,7 +70,7 @@ const CharList = (props) => {
 				<img 
 					src={char.thumbnail} 
 					alt={char.name}
-					style={marvelService.updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}
+					style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}
 				/>
 				<div className="char__name">{char.name}</div>
 			</li>
@@ -99,15 +85,16 @@ const CharList = (props) => {
 	}
 
 	const thumbsList = charList.map(char => char.thumbnail);
+	const items = renderItems(charList, thumbsList);
+
 	const errorMessage = error ? <ErrorMessage/> : null;
-	const spinner = loading ? <Spinner/> : null;
-	const content = !(loading || error) ? renderItems(charList, thumbsList) : null;
-	
+	const spinner = loading && !newItemLoading ? <Spinner/> : null;
+
 	return (
 		<div className="char__list">
 				{errorMessage}
 				{spinner}
-				{content}
+				{items}
 			<button 
 				className="button button__main button__long"
 				disabled={newItemLoading}
