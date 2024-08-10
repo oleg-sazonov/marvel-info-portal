@@ -6,6 +6,7 @@ const useMarvelService = () => {
 	const _apiKey = 'apikey=cbd9507e6ea639624589f6b2efbadb9b';
 	const _imgNotFound = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
 	const _baseCharacterOffset = 210;
+	const _baseComicsOffset = 10000;
 
 	const getAllCharacters = async (offset = _baseCharacterOffset) => {
 		const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
@@ -15,6 +16,16 @@ const useMarvelService = () => {
 	const getCharacter = async (id) => {
 		const res = await request(`${_apiBase}characters/${id}?${_apiKey}`);
 		return _transformCharacter(res.data.results[0]);
+	}
+
+	const getAllComics = async (offset = _baseComicsOffset) => {
+		const res = await request(`${_apiBase}characters?limit=8&offset=${offset}&${_apiKey}`);
+		return res.data.results.map(_transformComics);
+	}
+
+	const getComics = async (id) => {
+		const res = await request(`${_apiBase}comics/${id}?${_apiKey}`);
+		return _transformComics(res.data.results[0]);
 	}
 
 	const _transformCharacter = (char) => {
@@ -29,13 +40,30 @@ const useMarvelService = () => {
 		}
 	}
 
+	const _transformComics = (comics) => {
+		return {
+			id: comics.id,
+			title: comics.title,
+			thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
+			price: comics.prices[0].price ? `${comics.prices[0].price}$` : 'NOT AVAILABLE'
+		}
+	}
+
 	const updateThumbnailFit = (thumbnail, objectFit) => {
 		if (thumbnail === _imgNotFound) {
 			return objectFit;
 		} 
 	}
 
-	return {loading, error, clearError,	 getAllCharacters, getCharacter, updateThumbnailFit}
+	return {
+		loading,
+		error, 
+		clearError,	 
+		getAllCharacters, 
+		getCharacter, 
+		getAllComics,
+		getComics,
+		updateThumbnailFit}
 }
 
 export default useMarvelService;
