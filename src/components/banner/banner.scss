@@ -1,0 +1,23 @@
+@import '../../style/variables.scss';
+
+.banner {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-top: 50px;
+	padding: 0 25px 0 45px;
+	background-color: #232222;
+	&__wrapper {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		&-header {
+			margin-left: 83px;
+			color: rgb(255, 255, 255);
+			font-size: 24px;
+			font-weight: 700;
+			line-height: 32px;
+		}
+	}
+}
