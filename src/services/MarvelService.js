@@ -6,7 +6,7 @@ const useMarvelService = () => {
 	const _apiKey = 'apikey=cbd9507e6ea639624589f6b2efbadb9b';
 	const _imgNotFound = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
 	const _baseCharacterOffset = 210;
-	const _baseComicsOffset = 10000;
+	const _baseComicsOffset = 0;
 
 	const getAllCharacters = async (offset = _baseCharacterOffset) => {
 		const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
@@ -43,9 +43,9 @@ const useMarvelService = () => {
 	const _transformComics = (comics) => {
 		return {
 			id: comics.id,
-			title: comics.title,
+			title: comics.title ? comics.title : 'Title not found',
 			thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
-			price: comics.prices[0].price ? `${comics.prices[0].price}$` : 'NOT AVAILABLE'
+			price: comics.prices && comics.prices[0] ? `${comics.prices[0].price}$` : 'NOT AVAILABLE'
 		}
 	}
 
