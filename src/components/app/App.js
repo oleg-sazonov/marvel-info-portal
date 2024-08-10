@@ -5,6 +5,7 @@ import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import Banner from "../banner/Banner";
+import ComicsList from "../comicsList/ComicsList";
 import UpButton from "../upButton/UpButton";
 
 import decoration from "../../resources/img/bg-hero.png";
@@ -22,6 +23,7 @@ const App = () => {
         <div className="app">
             <AppHeader />
             <Banner/>
+            <ComicsList/>
             {/* <main>
                 <ErrorBoundary>
                     <RandomChar />
