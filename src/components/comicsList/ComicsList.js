@@ -5,7 +5,6 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 import useMarvelService from '../../services/MarvelService';
 
 import './comicsList.scss';
-// import comicsImage from '../../resources/img/UW-comics.jpg';
 
 const ComicsList = () => {
 
@@ -36,7 +35,6 @@ const ComicsList = () => {
 		setNewItemLoading(false);
 		setOffset(offset => offset + 8);
 		setComicsEnded(ended);
-		console.log(comicsList);
 	}
 
 	function renderItems (comics, thumbs) {

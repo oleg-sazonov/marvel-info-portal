@@ -37,7 +37,7 @@ const CharList = (props) => {
 		setOffset(offset => offset + 9);
 		setCharEnded(ended);
 	}
-
+	
 	const charRefs = useRef([]);
 
 	const focusOnItem = (id) => {
