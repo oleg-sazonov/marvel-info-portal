@@ -83,32 +83,32 @@ const View = ({char}) => {
 	
 	return(
 		<>
-		<div className="char__basics">
-			<img src={thumbnail} 
-				alt={name}
-				style={thumbnailFit}/>
-			<div>
-				<div className="char__info-name">{name}</div>
-				<div className="char__buttons">
-					<a href={homepage} className="button button__main">
-						<div className="inner">HOMEPAGE</div>
-					</a>
-					<a href={wiki} className="button button__secondary">
-						<div className="inner">WIKI</div>
-					</a>
+			<div className="char__basics">
+				<img src={thumbnail} 
+					alt={name}
+					style={thumbnailFit}/>
+				<div>
+					<div className="char__info-name">{name}</div>
+					<div className="char__buttons">
+						<a href={homepage} className="button button__main">
+							<div className="inner">HOMEPAGE</div>
+						</a>
+						<a href={wiki} className="button button__secondary">
+							<div className="inner">WIKI</div>
+						</a>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div className="char__descr">
-			{description}
-		</div>
-		<div className="char__comics">
-			Comics:
-		</div>
-		<ul className="char__comics-list">
-			{comicsVar}
-		</ul>
-	</>
+			<div className="char__descr">
+				{description}
+			</div>
+			<div className="char__comics">
+				Comics:
+			</div>
+			<ul className="char__comics-list">
+				{comicsVar}
+			</ul>
+		</>
 	)
 }
 
