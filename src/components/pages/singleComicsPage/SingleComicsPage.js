@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import useMarvelService from '../../../services/MarvelService';
 import Spinner from '../../spinner/Spinner';
@@ -11,23 +10,36 @@ import './singleComicsPage.scss';
 const SingleComicsPage = () => {
 
 	const {comicsId} = useParams();
+	const navigate = useNavigate();
 	const [comics, setComics] = useState(null);
 
 	const {loading, error, getComics, clearError} = useMarvelService();
 
 	useEffect(() => {
-		updateComics();
-	}, [comicsId]);
+        const isNumericId = /^\d+$/.test(comicsId);
+
+        if (!isNumericId) {
+            navigate('*'); 
+            return;
+        }
+
+        updateComics();
+    }, [comicsId]);
 
 	const updateComics = () => {
 		clearError();
 		getComics(comicsId)
-			.then(onComicsLoaded);
+			.then(onComicsLoaded)
+			.catch(() => navigate('*'));
 	} 
 
-	const onComicsLoaded = (comics) => {
-		setComics(comics);
-	}
+    const onComicsLoaded = (comics) => {
+        if (!comics) {
+            navigate('*'); 
+        } else {
+            setComics(comics);
+        }
+    }
 
 	const errorMessage = error ? <ErrorMessage/> : null;
 	const spinner = loading ? <Spinner/> : null;
