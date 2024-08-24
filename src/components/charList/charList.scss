@@ -2,6 +2,7 @@
 
 .char {
 	&__content {
+		position: relative;
 		margin-top: 50px;
         display: grid;
         grid-template-columns: 650px 425px;
@@ -39,5 +40,23 @@
 		font-weight: 700;
 		line-height: 26px;
 		text-transform: uppercase;
+	}
+	&-item-enter {
+		opacity: 0;
+		transform: translateY(100%);
+	}
+	&-item-enter-active {
+		opacity: 1;
+		transform: translateY(0); 
+		transition: opacity 500ms, transform 500ms;
+	}
+	&-item-exit {
+		opacity: 1;
+		transform: translateY(0); 
+	}
+	&-item-exit-active {
+		opacity: 0;
+		transform: translateY(100%); 
+		transition: opacity 500ms, transform 500ms;
 	}
 }

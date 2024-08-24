@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -13,6 +14,7 @@ const CharList = (props) => {
 	const [newItemLoading, setNewItemLoading] = useState(false);
 	const [offset, setOffset] = useState(210);
 	const [charEnded, setCharEnded] = useState(false);
+	const [clickedItem, setClickedItem] = useState(null);
 	
 	const {loading, error, getAllCharacters, updateThumbnailFit} = useMarvelService();
 
@@ -47,40 +49,56 @@ const CharList = (props) => {
 	}
 
 	function renderItems (chars, thumbs) {
+
+		const handleSelection = (i, charId) => {
+			setClickedItem(i);
+			props.onCharSelected(charId);
+			focusOnItem(i);
+		};
+
 		const items = chars.map((char, i) => {
+			let delay = i * 50;
+			const isClicked = clickedItem === i;
+
+			while (delay >= 400) {
+				delay -= 400;
+			}
 
 			return (
-				<li 
-				className={'char__item'}
-				tabIndex="0"
-				ref={el => charRefs.current[i] = el}
-				key={char.id} 
-				onClick={() => {
-					props.onCharSelected(char.id);
-					focusOnItem(i);
-				}}
-				onKeyDown={e => {
-					if (e.key === ' ' || e.key === 'Enter') {
-					  e.preventDefault();
-					  props.onCharSelected(char.id);
-					  focusOnItem(i);
-					}
-				}}
-				>
-				<img 
-					src={char.thumbnail} 
-					alt={char.name}
-					style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}
-				/>
-				<div className="char__name">{char.name}</div>
-			</li>
+				<CSSTransition 
+					key={char.id} 
+					nodeRef={charRefs.current[i]}
+					timeout={500} 
+					classNames="char-item">
+					<li 
+						className={'char__item'}
+						tabIndex="0"
+						ref={charRefs.current[i]}
+						style={{ 
+							transitionDelay: isClicked ? '0ms' : `${delay}ms`
+						}}
+						onClick={() => handleSelection(i, char.id)}
+						onKeyDown={e => {
+							if (e.key === ' ' || e.key === 'Enter') {
+								e.preventDefault();
+								handleSelection(i, char.id);
+							}
+						}}>
+						<img 
+							src={char.thumbnail} 
+							alt={char.name}
+							style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}
+						/>
+						<div className="char__name">{char.name}</div>
+					</li>
+				</CSSTransition>
 			)
 		});
 
 		return (
-			<ul className="char__grid">
-				{items}
-			</ul>
+			<TransitionGroup component="ul" className="char__grid">
+            	{items}
+        	</TransitionGroup>
 		)
 	}
 
