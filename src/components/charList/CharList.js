@@ -59,6 +59,7 @@ const CharList = (props) => {
 		const items = chars.map((char, i) => {
 			let delay = i * 50;
 			const isClicked = clickedItem === i;
+			const nodeRef = charRefs.current[i];
 
 			while (delay >= 400) {
 				delay -= 400;
@@ -67,13 +68,13 @@ const CharList = (props) => {
 			return (
 				<CSSTransition 
 					key={char.id} 
-					nodeRef={charRefs.current[i]}
+					nodeRef={nodeRef}
 					timeout={500} 
 					classNames="char-item">
 					<li 
 						className={'char__item'}
 						tabIndex="0"
-						ref={charRefs.current[i]}
+						ref={el => charRefs.current[i] = el}
 						style={{ 
 							transitionDelay: isClicked ? '0ms' : `${delay}ms`
 						}}
