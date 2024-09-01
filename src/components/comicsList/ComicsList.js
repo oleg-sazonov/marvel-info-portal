@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { motion } from 'framer-motion';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -39,41 +40,75 @@ const ComicsList = () => {
 		setComicsEnded(ended);
 	}
 
+	// function renderItems (comics, thumbs) {
+	// 	const items = comics.map((comics, i) => {
+
+	// 		let delay = i * 30;
+
+	// 		while (delay >= 240) {
+	// 			delay -= 240;
+	// 		}
+
+	// 		return (
+	// 			<CSSTransition 
+	// 				key={i} 
+	// 				timeout={500} 
+	// 				classNames="comics__item">
+	// 				<li 
+	// 					className="comics__item"
+	// 					style={{ transitionDelay: `${delay}ms` }}>
+	// 					<Link to={`/comics/${comics.id}`}>
+	// 						<img src={comics.thumbnail} 
+	// 							alt={comics.title}
+	// 							className="comics__item-img"
+	// 							style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}/>
+	// 						<div className="comics__item-name">{comics.title}</div>
+	// 						<div className="comics__item-price">{comics.price}</div>
+	// 					</Link>
+	// 				</li>
+	// 			</CSSTransition>
+	// 		)
+	// 	});
+
+	// 	return (
+	// 		<TransitionGroup component="ul" className="comics__list">
+	// 			{items}
+	// 	 	</TransitionGroup>
+	// 	)
+	// }
+
 	function renderItems (comics, thumbs) {
-		const items = comics.map((comics, i) => {
 
-			let delay = i * 30;
+		return comics.map((comics, i) => {
 
-			while (delay >= 240) {
-				delay -= 240;
+			let delay = i * 0.05;
+
+			while (delay >= 0.4) {
+				delay -= 0.4;
 			}
 
 			return (
-				<CSSTransition 
-					key={i} 
-					timeout={500} 
-					classNames="comics__item">
-					<li 
-						className="comics__item"
-						style={{ transitionDelay: `${delay}ms` }}>
-						<Link to={`/comics/${comics.id}`}>
-							<img src={comics.thumbnail} 
-								alt={comics.title}
-								className="comics__item-img"
-								style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}/>
-							<div className="comics__item-name">{comics.title}</div>
-							<div className="comics__item-price">{comics.price}</div>
-						</Link>
-					</li>
-				</CSSTransition>
+				<motion.li 
+				className="comics__item" 
+				key={i}
+				initial={{ opacity: 0, y: 100 }}
+				animate={{ opacity: 1, y: 0 }}
+				exit={{ opacity: 0, y: 100 }}
+				transition={{ duration: 0.2, delay: delay }}
+			>
+				<Link to={`/comics/${comics.id}`}>
+					<img 
+						src={comics.thumbnail} 
+						alt={comics.title}
+						className="comics__item-img"
+						style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}
+					/>
+					<div className="comics__item-name">{comics.title}</div>
+					<div className="comics__item-price">{comics.price}</div>
+				</Link>
+			</motion.li>
 			)
 		});
-
-		return (
-			<TransitionGroup component="ul" className="comics__list">
-				{items}
-		 	</TransitionGroup>
-		)
 	}
 
 	const thumbsList = comicsList.map(comics => comics.thumbnail);
@@ -82,11 +117,28 @@ const ComicsList = () => {
 	const errorMessage = error ? <ErrorMessage/> : null;
 	const spinner = loading && !newItemLoading ? <Spinner/> : null;
 
+	// return (
+	// 	<div className="comics__wrapper">
+	// 			{errorMessage}
+	// 			{spinner}
+	// 			{items}
+	// 		<button 
+	// 			className="button button__main button__long"
+	// 			disabled={newItemLoading}
+	// 			style={{'display': comicsEnded ? 'none' : 'block'}}
+	// 			onClick={() => onRequest(offset)}>
+	// 			<div className="inner">load more</div>
+	// 		</button>
+	// 	</div>
+	// )
+
 	return (
 		<div className="comics__wrapper">
-				{errorMessage}
-				{spinner}
+			{errorMessage}
+			{spinner}
+			<motion.ul className="comics__list" initial={false} animate="animate" exit="exit">
 				{items}
+			</motion.ul>
 			<button 
 				className="button button__main button__long"
 				disabled={newItemLoading}
@@ -95,7 +147,7 @@ const ComicsList = () => {
 				<div className="inner">load more</div>
 			</button>
 		</div>
-	)
+	);
 }
 
 export default ComicsList;
