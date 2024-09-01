@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -41,23 +42,37 @@ const ComicsList = () => {
 	function renderItems (comics, thumbs) {
 		const items = comics.map((comics, i) => {
 
+			let delay = i * 30;
+
+			while (delay >= 240) {
+				delay -= 240;
+			}
+
 			return (
-				<li className="comics__item" key={i} >
-					<Link to={`/comics/${comics.id}`}>
-						<img src={comics.thumbnail} 	
-							alt={comics.title}			 						className="comics__item-img"
-							style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}/>
-						<div className="comics__item-name">{comics.title}</div>
-						<div className="comics__item-price">{comics.price}</div>
-					</Link>
-				</li>
+				<CSSTransition 
+					key={i} 
+					timeout={500} 
+					classNames="comics__item">
+					<li 
+						className="comics__item"
+						style={{ transitionDelay: `${delay}ms` }}>
+						<Link to={`/comics/${comics.id}`}>
+							<img src={comics.thumbnail} 
+								alt={comics.title}
+								className="comics__item-img"
+								style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}/>
+							<div className="comics__item-name">{comics.title}</div>
+							<div className="comics__item-price">{comics.price}</div>
+						</Link>
+					</li>
+				</CSSTransition>
 			)
 		});
 
 		return (
-			<ul className="comics__list">
+			<TransitionGroup component="ul" className="comics__list">
 				{items}
-			</ul>
+		 	</TransitionGroup>
 		)
 	}
 

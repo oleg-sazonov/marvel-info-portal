@@ -41,6 +41,7 @@ const CharList = (props) => {
 	}
 	
 	const charRefs = useRef([]);
+	// const nodeRef = useRef(null);
 
 	const focusOnItem = (id) => {
 		charRefs.current.forEach(item => item.classList.remove('char__item_selected'));
@@ -57,18 +58,17 @@ const CharList = (props) => {
 		};
 
 		const items = chars.map((char, i) => {
-			let delay = i * 50;
+			let delay = i * 30;
 			const isClicked = clickedItem === i;
-			const nodeRef = charRefs.current[i];
 
-			while (delay >= 400) {
-				delay -= 400;
+			while (delay >= 270) {
+				delay -= 270;
 			}
 
 			return (
 				<CSSTransition 
 					key={char.id} 
-					nodeRef={nodeRef}
+					// nodeRef={nodeRef}
 					timeout={500} 
 					classNames="char-item">
 					<li 
