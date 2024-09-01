@@ -32,7 +32,6 @@ const CharInfo = (props) => {
 		if (!charId) {
 			return;
 		}
-
 		clearError();
 		getCharacter(charId)
 			.then(onCharLoaded);
@@ -56,14 +55,14 @@ const CharInfo = (props) => {
 	const content = !(loading || error || !char) ? <View char={char}/> : null;
 
 	return (
-		<div className={`char__info ${isFixed ? 'char__info_fixed' : ''}`}>
+		// <div className={`char__info ${isFixed ? 'char__info_fixed' : ''}`}>
+		<div className='char__info'>
 			{skeleton}
 			{errorMessage}
 			{spinner}
 			{content}
 		</div>
 	)
-
 }
 
 const View = ({char}) => {
