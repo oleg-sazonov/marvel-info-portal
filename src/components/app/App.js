@@ -14,6 +14,8 @@ const SinglePage = lazy(() => import('../pages/SinglePage'));
 
 const App = () => {
 
+    //add <Route>-s SinglePage(SingleComicLayout, SingleCharLayout)
+
     return (
         <Router>
             <div className="app">
