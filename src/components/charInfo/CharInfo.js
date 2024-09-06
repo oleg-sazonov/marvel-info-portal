@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import useMarvelService from '../../services/MarvelService';
@@ -70,12 +71,17 @@ const View = ({char}) => {
 	const {updateThumbnailFit} = useMarvelService();
 	const thumbnailFit = updateThumbnailFit(thumbnail, {objectFit: 'fill'});
 
+	console.log(char.id);
+
 	const comicsVar = (comics.length < 1) ? 'Comics not found' : comics
 		.filter((_, i) => i < 10)
 		.map((item, i) => {
+			const comicsId = item.resourceURI.split('/').pop(); 
 			return (
 				<li key={i + 1} className="char__comics-item">
-					{item.name}
+					<Link to={`/comics/${comicsId}`}>
+						{item.name}
+					</Link>
 				</li>
 			) 			
 	});
