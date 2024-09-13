@@ -25,7 +25,7 @@ const MainPage = () => {
 				<ErrorBoundary>
 					<CharList onCharSelected={onCharSelected}/>
 				</ErrorBoundary>
-				<div>
+				<div className="sticky__info">
 					<ErrorBoundary>
 						<CharInfo charId={selectedChar}/>
 					</ErrorBoundary>

@@ -1,10 +1,10 @@
 .page404 {
 	text-align: center;
 	margin-top: 50px;
-	.page404-text {
-	  font-size: 24px;
-	  color: #333;
-	  margin-top: 20px;
+	&-text {
+		font-size: 24px;
+		color: #333;
+		margin-top: 20px;
 	}
-  }
+}
   

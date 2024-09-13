@@ -77,7 +77,8 @@ const useMarvelService = () => {
 		getCharacterByName,
 		getAllComics,
 		getComics,
-		updateThumbnailFit}
+		updateThumbnailFit
+	}
 }
 
 export default useMarvelService;

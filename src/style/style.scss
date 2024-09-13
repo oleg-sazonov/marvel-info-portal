@@ -65,6 +65,12 @@ main {
     position: relative;
 }
 
+.sticky__info {
+    position: sticky;
+    top: 20px;
+    z-index: 5;
+ }
+
 .pulse {
     animation: pulse 1.5s ease-in-out .5s infinite
 }

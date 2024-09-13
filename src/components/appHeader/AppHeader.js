@@ -14,16 +14,16 @@ const AppHeader = () => {
 			<ul>
 				<li>
 					<NavLink 
-					end 
-					className={({ isActive }) => isActive ? 'active' : ''}
-					to="/">Characters
+						end 
+						className={({ isActive }) => isActive ? 'active' : ''}
+						to="/">Characters
 					</NavLink>
 				</li>
 				/
 				<li>
 					<NavLink 
-					className={({ isActive }) => isActive ? 'active' : ''}
-					to="/comics">Comics
+						className={({ isActive }) => isActive ? 'active' : ''}
+						to="/comics">Comics
 					</NavLink>
 				</li>
 			</ul>

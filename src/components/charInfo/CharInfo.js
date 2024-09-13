@@ -12,21 +12,11 @@ import './charInfo.scss';
 const CharInfo = (props) => {
 
 	const [char, setChar] = useState(null);
-	const [isFixed, setIsFixed] = useState(false);
-
 	const {loading, error, getCharacter, clearError} = useMarvelService();
 	
 	useEffect(() => {
 		updateChar();
 	}, [props.charId]);
-
-	useEffect(() => {
-		window.addEventListener('scroll', handleScroll);
-
-		return () => {
-			window.removeEventListener('scroll', handleScroll);
-		}
-	}, [isFixed]);
 	
 	const updateChar = () => {
 		const {charId} = props;
@@ -42,21 +32,12 @@ const CharInfo = (props) => {
 		setChar(char);
 	}
 
-	const handleScroll = () => {
-		const scrollPosition = window.scrollY;
-		const shouldBeFixed = scrollPosition > 425; 
-		if (isFixed !== shouldBeFixed) {
-			setIsFixed(shouldBeFixed);
-		}
-	}
-
 	const skeleton = char || loading || error ? null : <Skeleton/>;
 	const errorMessage = error ? <ErrorMessage/> : null;
 	const spinner = loading ? <Spinner/> : null;
 	const content = !(loading || error || !char) ? <View char={char}/> : null;
 
 	return (
-		// <div className={`char__info ${isFixed ? 'char__info_fixed' : ''}`}>
 		<div className='char__info'>
 			{skeleton}
 			{errorMessage}
