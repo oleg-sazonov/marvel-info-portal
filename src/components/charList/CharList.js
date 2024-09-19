@@ -41,7 +41,6 @@ const CharList = (props) => {
 	}
 	
 	const charRefs = useRef([]);
-	// const nodeRef = useRef(null);
 
 	const focusOnItem = (id) => {
 		charRefs.current.forEach(item => item.classList.remove('char__item_selected'));
@@ -68,7 +67,7 @@ const CharList = (props) => {
 			return (
 				<CSSTransition 
 					key={char.id} 
-					// nodeRef={nodeRef}
+					// nodeRef={char.nodeRef}
 					timeout={500} 
 					classNames="char-item">
 					<li 

@@ -52,8 +52,6 @@ const View = ({char}) => {
 	const {updateThumbnailFit} = useMarvelService();
 	const thumbnailFit = updateThumbnailFit(thumbnail, {objectFit: 'fill'});
 
-	console.log(char.id);
-
 	const comicsVar = (comics.length < 1) ? 'Comics not found' : comics
 		.filter((_, i) => i < 10)
 		.map((item, i) => {

@@ -23,24 +23,6 @@ const CharSearchForm = () => {
             .then(onCharLoaded);
     }
 
-    // const [isFixed, setIsFixed] = useState(false);
-
-	// useEffect(() => {
-	// 	window.addEventListener('scroll', handleScroll);
-
-	// 	return () => {
-	// 		window.removeEventListener('scroll', handleScroll);
-	// 	}
-	// }, [isFixed]);
-
-	// const handleScroll = () => {
-	// 	const scrollPosition = window.scrollY;
-	// 	const shouldBeFixed = scrollPosition > 425; 
-	// 	if (isFixed !== shouldBeFixed) {
-	// 		setIsFixed(shouldBeFixed);
-	// 	}
-	// }
-
     const errorMessage = error ? <div className="char__search-critical-error"><ErrorMessage /></div> : null;
     const results = !char ? null : char.length > 0 ?
                     <div className="char__search-wrapper">
@@ -54,7 +36,6 @@ const CharSearchForm = () => {
                     </div>;
 
     return (
-        // <div className={`char__search-form ${isFixed ? 'char__search-form_fixed' : ''}`}>
         <div className="char__search-form">
             <Formik
                 initialValues = {{
