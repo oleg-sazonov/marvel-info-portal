@@ -1,4 +1,3 @@
-// import { createRef } from 'react';
 import { useHttp } from "../hooks/http.hook";
 
 const useMarvelService = () => {
@@ -42,8 +41,7 @@ const useMarvelService = () => {
 			thumbnail: char.thumbnail.path + '.' + char.thumbnail.extension,
 			homepage: char.urls[0].url,
 			wiki: char.urls[1].url,
-			comics: char.comics.items,
-			// nodeRef: createRef(null)
+			comics: char.comics.items
 		}
 	}
 
