@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+import setContent from '../../utils/setContent';
 import Banner from '../banner/Banner';
 
 const SinglePage = ({Component, dataType}) => {
@@ -11,7 +12,7 @@ const SinglePage = ({Component, dataType}) => {
     //{id} is a property from <Route path="/comics/:id">...</Route> or <Route path="/characters/:id"></Route> from App.js
     const {id} = useParams();
     const [data, setData] = useState(null);
-    const {loading, error, getComics, getCharacter, clearError} = useMarvelService();
+    const {loading, error, process, setProcess, getComics, getCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
         updateData()
@@ -22,10 +23,14 @@ const SinglePage = ({Component, dataType}) => {
 
         switch (dataType) {
             case 'comic':
-                getComics(id).then(onDataLoaded);
+                getComics(id)
+                    .then(onDataLoaded)
+                    .then(() => setProcess('confirmed'));
                 break;
             case 'char':
-                getCharacter(id).then(onDataLoaded);
+                getCharacter(id)
+                    .then(onDataLoaded)
+                    .then(() => setProcess('confirmed'));
                 break;
         }
     }
@@ -34,16 +39,17 @@ const SinglePage = ({Component, dataType}) => {
         setData(data);
     }
 
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner style={{ marginTop: '60px' }}/> : null;
-    const content = !(loading || error || !data) ? <Component data={data}/> : null;
+    // const errorMessage = error ? <ErrorMessage/> : null;
+    // const spinner = loading ? <Spinner style={{ marginTop: '60px' }}/> : null;
+    // const content = !(loading || error || !data) ? <Component data={data}/> : null;
 
     return (
         <>
             <Banner/>
-            {errorMessage}
+            {/* {errorMessage}
             {spinner}
-            {content}
+            {content} */}
+            {setContent(process, Component, data, {marginTop: '60px'})}
         </>
     )
 }
