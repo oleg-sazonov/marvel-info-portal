@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
@@ -74,12 +74,12 @@ const CharList = (props) => {
 		};
 
 		const items = chars.map((char, i) => {
-			let delay = i * 30;
-			const isClicked = clickedItem === i;
+			// let delay = i * 30;
+			// const isClicked = clickedItem === i;
 
-			while (delay >= 270) {
-				delay -= 270;
-			}
+			// while (delay >= 270) {
+			// 	delay -= 270;
+			// }
 
 			return (
 				<CSSTransition 
@@ -91,9 +91,9 @@ const CharList = (props) => {
 						className={'char__item'}
 						tabIndex="0"
 						ref={el => charRefs.current[i] = el}
-						style={{ 
-							transitionDelay: isClicked ? '0ms' : `${delay}ms`
-						}}
+						// style={{ 
+						// 	transitionDelay: isClicked ? '0ms' : `${delay}ms`
+						// }}
 						onClick={() => handleSelection(i, char.id)}
 						onKeyDown={e => {
 							if (e.key === ' ' || e.key === 'Enter') {
@@ -125,12 +125,17 @@ const CharList = (props) => {
 	// const errorMessage = error ? <ErrorMessage/> : null;
 	// const spinner = loading && !newItemLoading ? <Spinner/> : null;
 
+	const elements = useMemo(() => {
+		return setContent(process, () => renderItems(charList, thumbsList), newItemLoading);
+		// eslint-disable-next-line
+	}, [process]);
+
 	return (
 		<div className="char__list">
 				{/* {errorMessage}
 				{spinner}
 				{items} */}
-				{setContent(process, () => renderItems(charList, thumbsList), newItemLoading)}
+				{elements}
 			<button 
 				className="button button__main button__long"
 				disabled={newItemLoading}
