@@ -10,10 +10,11 @@ import './charInfo.scss';
 const CharInfo = (props) => {
 
 	const [char, setChar] = useState(null);
-	const {loading, error, process, setProcess, getCharacter, clearError} = useMarvelService();
+	const {process, setProcess, getCharacter, clearError} = useMarvelService();
 	
 	useEffect(() => {
 		updateChar();
+		// eslint-disable-next-line
 	}, [props.charId]);
 	
 	const updateChar = () => {
@@ -31,17 +32,8 @@ const CharInfo = (props) => {
 		setChar(char);
 	}
 
-	// const skeleton = char || loading || error ? null : <Skeleton/>;
-	// const errorMessage = error ? <ErrorMessage/> : null;
-	// const spinner = loading ? <Spinner/> : null;
-	// const content = !(loading || error || !char) ? <View char={char}/> : null;
-
 	return (
 		<div className='char__info'>
-			{/* {skeleton}
-			{errorMessage}
-			{spinner}
-			{content} */}
 			{setContent(process, View, char)}
 		</div>
 	)

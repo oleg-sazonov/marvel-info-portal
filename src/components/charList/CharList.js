@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useMarvelService from '../../services/MarvelService';
-// import setContent from '../../utils/setContent';
 
 import './charList.scss';
 
@@ -30,12 +28,12 @@ const CharList = (props) => {
 	const [newItemLoading, setNewItemLoading] = useState(false);
 	const [offset, setOffset] = useState(210);
 	const [charEnded, setCharEnded] = useState(false);
-	const [clickedItem, setClickedItem] = useState(null);
 	
-	const {loading, error, process, setProcess, getAllCharacters, updateThumbnailFit} = useMarvelService();
+	const {process, setProcess, getAllCharacters, updateThumbnailFit} = useMarvelService();
 
 	useEffect(() => {
 		onRequest(offset, true);
+		// eslint-disable-next-line
 	}, []);
 
 	const onRequest = (offset, initial) => {
@@ -68,62 +66,43 @@ const CharList = (props) => {
 	function renderItems (chars, thumbs) {
 
 		const handleSelection = (i, charId) => {
-			setClickedItem(i);
 			props.onCharSelected(charId);
 			focusOnItem(i);
 		};
 
 		const items = chars.map((char, i) => {
-			// let delay = i * 30;
-			// const isClicked = clickedItem === i;
-
-			// while (delay >= 270) {
-			// 	delay -= 270;
-			// }
-
 			return (
-				<CSSTransition 
-					key={char.id} 
-					// nodeRef={nodeRef}
-					timeout={500} 
-					classNames="char-item">
-					<li 
-						className={'char__item'}
-						tabIndex="0"
-						ref={el => charRefs.current[i] = el}
-						// style={{ 
-						// 	transitionDelay: isClicked ? '0ms' : `${delay}ms`
-						// }}
-						onClick={() => handleSelection(i, char.id)}
-						onKeyDown={e => {
-							if (e.key === ' ' || e.key === 'Enter') {
-								e.preventDefault();
-								handleSelection(i, char.id);
-							}
-						}}>
-						<img 
-							src={char.thumbnail} 
-							alt={char.name}
-							style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}
-						/>
-						<div className="char__name">{char.name}</div>
-					</li>
-				</CSSTransition>
+				<li 
+					className={'char__item'}
+					key={char.id}
+					tabIndex="0"
+					ref={el => charRefs.current[i] = el}
+					onClick={() => handleSelection(i, char.id)}
+					onKeyDown={e => {
+						if (e.key === ' ' || e.key === 'Enter') {
+							e.preventDefault();
+							handleSelection(i, char.id);
+						}
+					}}>
+					<img 
+						src={char.thumbnail} 
+						alt={char.name}
+						style={updateThumbnailFit(thumbs[i], {objectFit: 'fill'})}
+					/>
+					<div className="char__name">{char.name}</div>
+				</li>
+
 			)
 		});
 
 		return (
-			<TransitionGroup component="ul" className="char__grid">
-            	{items}
-        	</TransitionGroup>
+			<ul className="char__grid">
+				{items}
+			</ul>
 		)
 	}
 
 	const thumbsList = charList.map(char => char.thumbnail);
-	// const items = renderItems(charList, thumbsList);
-
-	// const errorMessage = error ? <ErrorMessage/> : null;
-	// const spinner = loading && !newItemLoading ? <Spinner/> : null;
 
 	const elements = useMemo(() => {
 		return setContent(process, () => renderItems(charList, thumbsList), newItemLoading);
@@ -132,9 +111,6 @@ const CharList = (props) => {
 
 	return (
 		<div className="char__list">
-				{/* {errorMessage}
-				{spinner}
-				{items} */}
 				{elements}
 			<button 
 				className="button button__main button__long"

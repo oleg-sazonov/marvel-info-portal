@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-// import Spinner from '../spinner/Spinner';
-// import ErrorMessage from '../errorMessage/ErrorMessage';
 import useMarvelService from '../../services/MarvelService';
 import setContent from '../../utils/setContent';
 
@@ -10,7 +8,7 @@ import shield from '../../resources/img/shield.png'
 const RandomChar = () => {
 
 	const [char, setChar] = useState({});
-	const {loading, error, process, setProcess, getCharacter, clearError} = useMarvelService();
+	const {process, setProcess, getCharacter, clearError} = useMarvelService();
 
 	useEffect(() => {
 		updateChar();
@@ -19,6 +17,7 @@ const RandomChar = () => {
         return () => {
             clearInterval(timerId)
         }
+		// eslint-disable-next-line
 	}, []);
 
 	const onCharLoaded = (char) => {
@@ -33,17 +32,8 @@ const RandomChar = () => {
 			.then(() => setProcess('confirmed'));
 	}
 
-	// const errorMessage = error ? <ErrorMessage/> : null;
-	// const spinner = loading ? <Spinner/> : null;
-	// const content = !(loading || error) ? <View char={char}/> : null;
-
-
-
 	return (
 		<div className="randomchar">
-			{/* {errorMessage}
-			{spinner}
-			{content} */}
 			{setContent(process, View, char)}
 			<div className="randomchar__static">
 				<p className="randomchar__title">
@@ -63,7 +53,6 @@ const RandomChar = () => {
 			</div>
 		</div>
 	)
-
 }
 
 const View = ({data}) => {
@@ -78,16 +67,16 @@ const View = ({data}) => {
 				style={thumbnailFit}
 				className="randomchar__img"/>
 			<div className="randomchar__info">
-			<p className="randomchar__name">{name}</p>
-			<p className="randomchar__descr">{description}</p>
-			<div className="randomchar__buttons">
-				<a href={homepage} className="button button__main">
-				<div className="inner">Homepage</div>
-				</a>
-				<a href={wiki} className="button button__secondary">
-				<div className="inner">wiki</div>
-				</a>
-			</div>
+				<p className="randomchar__name">{name}</p>
+				<p className="randomchar__descr">{description}</p>
+				<div className="randomchar__buttons">
+					<a href={homepage} className="button button__main">
+						<div className="inner">Homepage</div>
+					</a>
+					<a href={wiki} className="button button__secondary">
+						<div className="inner">wiki</div>
+					</a>
+				</div>
 			</div>
 		</div>
 	)

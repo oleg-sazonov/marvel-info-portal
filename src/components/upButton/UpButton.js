@@ -28,7 +28,9 @@ const UpButton = () => {
 		}, []);
 
 	return (
-		<div className="up-button" onClick={scrollToTop} 
+		<div 
+			className="up-button" 
+			onClick={scrollToTop} 
 			style={{ display: visible ? 'block' : 'none'}}>
 			<UpArrow className="up-arrow-icon" />
 		</div>
